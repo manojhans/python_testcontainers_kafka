@@ -5,10 +5,19 @@ from kafka import KafkaConsumer
 from kafka.errors import KafkaError
 from testcontainers.compose import DockerCompose
 from testcontainers.core.waiting_utils import wait_container_is_ready
+from testcontainers.kafka import KafkaContainer
 
 
 @pytest.fixture
 def kafka_container():
+    container = KafkaContainer()
+    container.start()
+    yield container
+    container.stop()
+
+
+@pytest.fixture
+def kafka_container_using_docker_compose():
     get_container()
     yield
     get_container().stop()
